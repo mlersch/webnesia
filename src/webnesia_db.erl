@@ -100,7 +100,7 @@ list (Table, Limit, 0) ->
 %%--------------------------------------------------------------------
 list (Table, Limit, Offset) ->
     {atomic, Records} = mnesia:transaction(fun() -> C = qlc:cursor(qlc:q([X||X<-mnesia:table(list_to_atom(Table))])), qlc:next_answers(C, Offset), qlc:next_answers(C, Limit) end ),
-    webnesia_response:encode_records(Records, mnesia:table_info(list_to_atom(Table), size), Limit, Offset).
+    webnesia_response:encode_records(Records,list_to_atom(Table), Limit, Offset).
 
 %--------------------------------------------------------------------
 %% @doc
@@ -117,7 +117,7 @@ list (Table, 0) ->
 %%--------------------------------------------------------------------
 list (Table, Limit) ->
     {atomic, Records} = mnesia:transaction(fun() -> C = qlc:cursor(qlc:q([X||X<-mnesia:table(list_to_atom(Table))])), qlc:next_answers(C, Limit) end ),
-    webnesia_response:encode_records(Records, mnesia:table_info(list_to_atom(Table), size), Limit, 0).
+    webnesia_response:encode_records(Records, list_to_atom(Table), Limit, 0).
 
 %--------------------------------------------------------------------
 %% @doc
@@ -126,7 +126,7 @@ list (Table, Limit) ->
 %%--------------------------------------------------------------------
 list (Table) ->
     {atomic, Records} = mnesia:transaction(fun() -> mnesia:match_object(list_to_atom(Table), mnesia:table_info(list_to_atom(Table), wild_pattern), write) end),
-    webnesia_response:encode_records(Records, mnesia:table_info(list_to_atom(Table), size), mnesia:table_info(list_to_atom(Table), size), 0).
+    webnesia_response:encode_records(Records, list_to_atom(Table), mnesia:table_info(list_to_atom(Table), size), 0).
 
 %--------------------------------------------------------------------
 %% @doc
@@ -151,7 +151,7 @@ save (Table, JSONData) ->
 %%--------------------------------------------------------------------
 read (Table, Key) ->
     {atomic, Records} = mnesia:transaction(fun() -> mnesia:read(list_to_atom(Table), mochijson2:decode(Key)) end),
-    webnesia_response:encode_records(Records, mnesia:table_info(list_to_atom(Table), size), mnesia:table_info(list_to_atom(Table), size), 0).
+    webnesia_response:encode_records(Records, list_to_atom(Table), mnesia:table_info(list_to_atom(Table), size), 0).
 
 %--------------------------------------------------------------------
 %% @doc
