@@ -22,15 +22,15 @@ encode (Data) ->
 %%
 %% @end
 %%--------------------------------------------------------------------
-encode_records (Records, Size, Limit, Offset) ->
-    encode({struct, [{total_rows, Size}, {number_of_rows, length(Records)}, {limit, Limit}, {offset, Offset}, {rows, records_to_structs(Records)}]}).
+encode_records (Records, Table, Limit, Offset) ->
+    encode({struct, [{total_rows, mnesia:table_info(Table, size)}, {number_of_rows, length(Records)}, {limit, Limit}, {offset, Offset}, {rows, records_to_structs(mnesia:table_info(Table, attributes), Records)}]}).
 
 %--------------------------------------------------------------------
 %% @doc
 %%
 %% @end
 %%--------------------------------------------------------------------
-records_to_structs ([]) ->
+records_to_structs (_, []) ->
     [];
 
 %--------------------------------------------------------------------
@@ -40,8 +40,14 @@ records_to_structs ([]) ->
 %%
 %% @end
 %%--------------------------------------------------------------------
-records_to_structs ([Record | Tail]) ->
-    [Table | Values] = tuple_to_list(Record),
-    Attributes = mnesia:table_info(Table, attributes),
-    lists:merge(fun(_, _) -> true end, [{struct, lists:zip(Attributes, Values)}], records_to_structs(Tail)).
+records_to_structs (Attributes, [Record | Tail]) ->
+    [_ | Values] = tuple_to_list(Record),
+    NewValues =  change_binary(Values,[]), %% if the content is in list it is changed to binary so that id displays correctly at frontend.
+    lists:merge(fun(_, _) -> true end, [{struct, lists:zip(Attributes, NewValues)}], records_to_structs(Attributes, Tail)).
 
+change_binary([], Acc)->
+	Acc;
+change_binary([H|T], Acc) when is_list(H) ->
+	change_binary(T,Acc++[list_to_binary(H)]);
+change_binary([H|T], Acc) -> change_binary(T,Acc++[H]).
+	

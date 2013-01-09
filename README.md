@@ -6,11 +6,11 @@ webnesia is a REST interface to Erlang's mnesia. It provides an API and a Web fr
 
 ## Installation instructions
 
-1. make sure you have [mochiweb](https://github.com/mochi/mochiweb) installed;
+1. Make sure you have added rebar in $PATH 
 
-2. check the symlink to mochiweb source on `deps/`;
+2. Webnesia depends on mochiweb. To download dependencies `rebar get-deps`
 
-3. run `make`;
+3. To compile `rebar compile`
 
 4. run `./start-dev.sh`;
 
