@@ -47,6 +47,8 @@ records_to_structs (Attributes, [Record | Tail]) ->
 
 change_binary([], Acc)->
 	Acc;
+change_binary([[H]|T], Acc) when is_integer(H) ->
+  change_binary(T,Acc++[integer_to_binary(H)]);
 change_binary([H|T], Acc) when is_list(H) ->
 	change_binary(T,Acc++[list_to_binary(H)]);
 change_binary([H|T], Acc) -> change_binary(T,Acc++[H]).

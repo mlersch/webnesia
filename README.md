@@ -12,9 +12,9 @@ webnesia is a REST interface to Erlang's mnesia. It provides an API and a Web fr
 
 3. To compile `rebar compile`
 
-4. run `./start-dev.sh`;
+4. run `application:start(webnesia)` in your console or add it to rebar;
 
-5. open your browser on [http://localhost:8000/_utils/](http://localhost:8000/_utils/).
+5. open your browser on [http://localhost:8282/_utils/](http://localhost:8282/_utils/).
 
 ## API
 
