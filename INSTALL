@@ -1,0 +1,4 @@
+    - make deps
+    - make console
+    - open your browser on http://localhost:8282/_utils/
+
