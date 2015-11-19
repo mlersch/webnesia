@@ -50,6 +50,6 @@ change_binary([], Acc)->
 change_binary([[H]|T], Acc) when is_integer(H) ->
   change_binary(T,Acc++[integer_to_binary(H)]);
 change_binary([H|T], Acc) when is_list(H) ->
-	change_binary(T,Acc++[list_to_binary(H)]);
+	change_binary(T,Acc++[list_to_binary(io_lib:format("~p",[H]))]);
 change_binary([H|T], Acc) -> change_binary(T,Acc++[H]).
 	
